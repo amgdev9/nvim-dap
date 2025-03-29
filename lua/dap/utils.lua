@@ -58,29 +58,6 @@ function M.index_of(items, predicate)
 end
 
 
---- Return running processes as a list with { pid, name } tables.
----
---- Takes an optional `opts` table with the following options:
----
---- - filter string|fun: A lua pattern or function to filter the processes.
----                      If a function the parameter is a table with
----                      {pid: integer, name: string}
----                      and it must return a boolean.
----                      Matches are included.
----
---- <pre>
---- require("dap.utils").pick_process({ filter = "sway" })
---- </pre>
----
---- <pre>
---- require("dap.utils").pick_process({
----   filter = function(proc) return vim.endswith(proc.name, "sway") end
---- })
---- </pre>
----
----@param opts? {filter: string|(fun(proc: dap.utils.Proc): boolean)}
----
----@return dap.utils.Proc[]
 function M.get_processes(opts)
   opts = opts or {}
   local is_windows = vim.fn.has('win32') == 1
@@ -192,47 +169,6 @@ end
 M._trim_procname = trim_procname
 
 
----@class dap.utils.Proc
----@field pid integer
----@field name string
-
----@class dap.utils.pick_process.Opts
----@field filter? string|fun(proc: dap.utils.Proc):boolean
----@field label? fun(proc: dap.utils.Proc): string
----@field prompt? string
-
---- Show a prompt to select a process pid
---- Requires `ps ah -u $USER` on Linux/Mac and `tasklist /nh /fo csv` on windows.
---
---- Takes an optional `opts` table with the following options:
----
---- - filter string|fun: A lua pattern or function to filter the processes.
----                      If a function the parameter is a table with
----                      {pid: integer, name: string}
----                      and it must return a boolean.
----                      Matches are included.
----
---- - label         fun: A function to generate a custom label for the processes.
----                      If not provided, a default label is used.
---- - prompt     string: The title/prompt of pick process select.
----
---- <pre>
---- require("dap.utils").pick_process({ filter = "sway" })
---- </pre>
----
---- <pre>
---- require("dap.utils").pick_process({
----   filter = function(proc) return vim.endswith(proc.name, "sway") end
---- })
---- </pre>
----
---- <pre>
---- require("dap.utils").pick_process({
----   label = function(proc) return string.format("Process: %s (PID: %d)", proc.name, proc.pid) end
---- })
---- </pre>
----
----@param opts? dap.utils.pick_process.Opts
 function M.pick_process(opts)
   opts = opts or {}
   local cols = math.max(14, math.floor(vim.o.columns * 0.7))
@@ -328,25 +264,6 @@ local function get_files(path, opts)
 end
 
 
---- Show a prompt to select a file.
---- Returns the path to the selected file.
---- Requires nvim 0.10+ or a `find` executable
----
---- Takes an optional `opts` table with following options:
----
---- - filter string|fun: A lua pattern or function to filter the files.
----                      If a function the parameter is a string and it
----                      must return a boolean. Matches are included.
----
---- - executables boolean: Show only executables. Defaults to true
---- - path string: Path to search for files. Defaults to cwd
----
---- <pre>
---- require('dap.utils').pick_file({ filter = '.*%.py', executables = true })
---- </pre>
----@param opts? {filter?: string|(fun(name: string): boolean), executables?: boolean, path?: string}
----
----@return thread|string|dap.Abort
 function M.pick_file(opts)
   opts = opts or {}
   local executables = opts.executables == nil and true or opts.executables

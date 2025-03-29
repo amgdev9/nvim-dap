@@ -109,7 +109,6 @@ end
 function M.newlaunchjson(args)
   if vim.snippet then
     local text = [[{
-    "\$schema": "https://raw.githubusercontent.com/mfussenegger/dapconfig-schema/master/dapconfig-schema.json",
     "version": "0.2.0",
     "configurations": [
         {
@@ -125,7 +124,6 @@ function M.newlaunchjson(args)
   else
     local lines = {
       '{',
-      '   "$schema": "https://raw.githubusercontent.com/mfussenegger/dapconfig-schema/master/dapconfig-schema.json",',
       '   "version": "0.2.0",',
       '   "configurations": [',
       '       {',

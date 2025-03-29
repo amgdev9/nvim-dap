@@ -241,20 +241,6 @@ local DAP_QUICKFIX_CONTEXT = DAP_QUICKFIX_TITLE
 
 ---@alias dap.AdapterFactory fun(callback: fun(adapter: dap.Adapter), config: dap.Configuration, parent?: dap.Session)
 
---- Adapter definitions. See `:help dap-adapter` for more help
----
---- An example:
----
---- ```
---- require('dap').adapter.debugpy = {
----   {
----       type = "executable"
----       command = "/usr/bin/python",
----       args = {"-m", "debugpy.adapter"},
----   },
---- }
---- ```
----@type table<string, dap.Adapter|dap.AdapterFactory>
 M.adapters = {}
 
 
@@ -265,21 +251,6 @@ M.adapters = {}
 ---@field [string] any
 
 
---- Configurations per adapter. See `:help dap-configuration` for more help.
----
---- An example:
----
---- ```
---- require('dap').configurations.python = {
----   {
----       name = "My configuration",
----       type = "debugpy", -- references an entry in dap.adapters
----       request = "launch",
----       -- + Other debug adapter specific configuration options
----   },
---- }
---- ```
----@type table<string, dap.Configuration[]>
 M.configurations = {}
 
 local providers = {
